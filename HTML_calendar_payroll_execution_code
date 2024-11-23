@@ -1,0 +1,90 @@
+ def generate_schedule(self): # method to make schedule for each day in HTML file, with given hours initially set to zero for each unless specified 
+        for caregiver in self.caregivers:
+            caregiver.hours = 0
+
+        
+        schedule = [["", ""] for _ in range(7)]
+        shifts = ["AM", "PM"]
+
+        for day in range(7):
+            for shift in range(2):
+                preferred = [caregiver for caregiver in self.caregivers if caregiver.availability[day][shift] == "Preferred"]
+                available = [caregiver for caregiver in self.caregivers if caregiver.availability[day][shift] == "Available"]
+
+                if preferred:
+                    selected = preferred[0]
+                elif available:
+                    selected = available[0]
+                else:
+                    selected = None
+
+                if selected:
+                    schedule[day][shift] = selected.name
+                    selected.hours += 6  # Allocate 6 hours for each shift
+
+        self.create_html_calendar(schedule)
+        
+# creating html calendar for each day of the week and shift 
+    def create_html_calendar(self, schedule):
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        shifts = ["AM", "PM"]
+        calendar_html = "<html><head><title>Care Schedule</title></head><body>"
+        calendar_html += "<h1>Weekly Care Schedule</h1><table border='1'><tr><th>Day</th><th>AM Shift</th><th>PM Shift</th></tr>"
+
+        for day, (am, pm) in enumerate(schedule):
+            calendar_html += f"<tr><td>{days[day]}</td><td>{am}</td><td>{pm}</"
+
+
+        calendar_html += "</table></body></html>"
+
+        # writing out caregiver information and schedule into html file 
+        file_path = filedialog.asksaveasfilename(defaultextension = ".html", filetypes = [("HTML files", "*.html")])
+        if file_path:
+            with open(file_path, "w") as file: # writing into this new html file
+                file.write(calendar_html)
+            print(f"Schedule in {file_path}")
+
+    def payroll_report(self): # function for new payroll window to open as a scrollable 
+        payroll_report_window = Tk() # separate window 
+        payroll_report_window.title("Payroll Report")
+        payroll_report_window.geometry("600x600")
+    
+        # scroll bar and text widget for payroll report
+        text_area = Text(payroll_report_window, wrap = "word") # go to next line at the edge of window
+        scroll_bar = Scrollbar(payroll_report_window, orient = VERTICAL, command = text_area.yview)
+        text_area.configure(yscrollcommand = scroll_bar.set) # configure the text area to work with the scroll bar
+        scroll_bar.pack(side = RIGHT, fill = Y) # packing scrollbar to the right side, filling entire Y space
+        text_area.pack(expand = True, fill = "both") # packing text area to the entire space, fills both X and Y planes
+    # setting pay to zero for manipulation later
+        total_weekly_pay = 0.0
+        total_monthly_pay = 0.0
+        report = [] # list to hold pay report information
+    
+        for caregiver in self.caregivers:
+            weekly_pay = caregiver.hours * caregiver.pay_rate
+            monthly_pay = weekly_pay * 4
+            total_weekly_pay += weekly_pay
+            total_monthly_pay += monthly_pay
+    # adding all the name, pay and hours to report 
+            report.append(
+                f"Name: {caregiver.name}\n"
+                f"Weekly Hours: {caregiver.hours} hours\n"
+                f"Weekly Pay: ${weekly_pay:.2f}\n" # 2 decimal places rounding
+                f"Monthly Pay: ${monthly_pay:.2f}\n\n"
+            )
+    # adding totals for weekly and monthly pay to the report
+        report.append(f"Total Weekly Pay: ${total_weekly_pay:.2f}\n")
+        report.append(f"Total Monthly Pay: ${total_monthly_pay:.2f}\n")
+    
+        text_area.insert("1.0", "\n".join(report)) # inserting text from the report list at the start, with new line separation
+        text_area.configure(state = "disabled") # read only text area
+
+
+    def run(self): # run method for program
+        self.master.mainloop()
+
+
+# execute caregiver manager
+if __name__ == "__main__":
+    app = CaregiverManager()
+    app.run()
