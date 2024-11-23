@@ -1,3 +1,64 @@
 # INST326_Project03_56_Group
 Project 3
 
+class Caregiver:
+    def __init__(self, name, phone, email, pay_rate=20):
+        # Gather basic caaregiver info.
+        self.name = name
+        self.phone = phone
+        self.email = email
+        self.pay_rate = pay_rate
+        
+        # The care assistant's availability during specific weekdays.
+        self.available = {
+            "Monday": {"AM": "available", "PM": "available"},
+            "Tuesday": {"AM": "available", "PM": "available"},
+            "Wednesday": {"AM": "available", "PM": "available"},
+            "Thursday": {"AM": "available", "PM": "available"},
+            "Friday": {"AM": "available", "PM": "available"},
+            "Saturday": {"AM": "available", "PM": "available"},
+            "Sunday": {"AM": "available", "PM": "available"}
+        }
+
+    # Set availability for a specific day and time.
+    def set_availability(self, day, time, available):
+        if day in self.available:
+            if time in self.available[day]:
+                if available in ["preferred", "available", "unavailable"]:
+                    self.available[day][time] = available
+                else:
+                    print("Invalid availability status: {}. Please select 'preferred', 'available' or 'unavailable'.".format(available))
+            else:
+                print("Invalid time option provided.")
+        else:
+            print("Invalid day was provided.")
+
+  # Get availability for a specific day.
+    def get_availability(self, day):
+        if day in self.available:
+            return self.available[day]
+        else:
+            return "Invalid day"
+
+    # Show complete availability.
+    def show_availability(self):
+        for day in self.available:
+            print(day, ":", "AM:", self.available[day]["AM"], ", PM:", self.available[day]["PM"])
+
+# Example usage:
+
+# Creating the caregiver.
+caregiver1 = Caregiver("John Doe", "555-1234", "john.doe@email.com")
+
+# Show previous availability.
+caregiver1.show_availability()
+
+# Set specific availability.
+caregiver1.set_availability("Monday", "AM", "preferred")
+caregiver1.set_availability("Friday", "PM", "unavailable")
+
+# Show thereafter.
+caregiver1.show_availability()
+
+# Get availability for that particular day.
+print(caregiver1.get_availability("Monday")) 
