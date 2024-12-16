@@ -15,18 +15,28 @@ Payroll Report: Displays a payroll report for all caregivers, showing weekly and
 Update Hours: Allows you to modify the hours worked for a selected caregiver.
 **Code Structure**
 
-Classes
+Classes:
 Person: Base class for storing basic information like name, phone, and email.
+
 Caregiver: Inherits from Person, adding attributes for pay rate, availability, and hours worked. Includes methods for updating details, setting availability, and calculating pay.
+
 CaregiverManager: Manages the Tkinter interface, caregiving operations, and GUI elements.
-Methods
+Methods:
+
 add_caregiver(): Adds a caregiver to the list.
+
 update_caregiver(): Updates details of a selected caregiver.
+
 delete_caregiver(): Deletes a selected caregiver.
+
 availability_window(): Opens a window to set caregiver availability.
+
 generate_schedule(): Generates a care schedule based on caregiver availability.
+
 payroll_report(): Generates and displays a payroll report.
+
 update_hours(): Updates the hours worked for a selected caregiver.
+
 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
