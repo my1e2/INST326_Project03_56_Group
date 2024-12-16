@@ -22,6 +22,7 @@ Person: Base class for storing basic information like name, phone, and email.
 Caregiver: Inherits from Person, adding attributes for pay rate, availability, and hours worked. Includes methods for updating details, setting availability, and calculating pay.
 
 CaregiverManager: Manages the Tkinter interface, caregiving operations, and GUI elements.
+
 Methods:
 
 add_caregiver(): Adds a caregiver to the list.
